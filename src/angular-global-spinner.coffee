@@ -1,4 +1,4 @@
-angular.module("globalSpinner")
+angular.module("globalSpinner", [])
 
 angular.module('globalSpinner').config ($provide, $httpProvider) ->
   $provide.factory 'SpinnerInterceptor', ['$q', '$injector', ($q, $injector) ->

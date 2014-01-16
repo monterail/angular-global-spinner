@@ -1,5 +1,5 @@
 (function() {
-  angular.module("globalSpinner");
+  angular.module("globalSpinner", []);
 
   angular.module('globalSpinner').config(function($provide, $httpProvider) {
     $provide.factory('SpinnerInterceptor', [
@@ -49,7 +49,7 @@
       replace: true,
       link: function(scope, element) {
         return scope.$watch("$spinnerLoading", function(v) {
-          return angular.element(element).css('display', v ? 'block' : 'none');
+          return element.css('display', v ? 'block' : 'none');
         });
       }
     };
