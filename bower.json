@@ -1,0 +1,17 @@
+{
+  "name": "angular-global-spinner",
+  "version": "0.1.0",
+  "authors": [
+    "Kamil Nicieja <kamil.nicieja@monterail.com>"
+  ],
+  "repository": "git://github.com/monterail/angular-global-spinner.git",
+  "description": "Angular global HTTP spinner",
+  "main": [
+    "build/angular-global-spinner.js"
+  ],
+  "dependencies": {
+    "angular": "~1.2"
+  },
+  "license": "MIT",
+  "homepage": "http://github.com/monterail/angular-global-spinner"
+}
