@@ -40,4 +40,4 @@ angular.module('globalSpinner').directive 'spinner', ->
   replace: true
   link: (scope, element) ->
     scope.$watch "$spinnerLoading", (v) ->
-      angular.element(element).css('display', if v then 'block' else 'none')
+      element.css('display', if v then 'block' else 'none')
