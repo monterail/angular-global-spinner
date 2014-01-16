@@ -21,6 +21,8 @@ angular.module('myApp', ['globalSpinner']);
 <div spinner="true" />
 ```
 
+You have, however, apply your own stylsheets.
+
 ## Contributing
 
 1. Fork it
