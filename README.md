@@ -12,7 +12,7 @@ bower install angular-global-spinner
 ## Usage
 
 ```js
-// require dateRangePicker module as dependency
+// require globalSpinner module as dependency
 angular.module('myApp', ['globalSpinner']);
 ```
 
