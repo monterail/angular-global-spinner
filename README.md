@@ -19,7 +19,7 @@ angular.module('myApp', ['globalSpinner']);
 ## Configuration
 ```js
 
-angular.module("myApp").config (globalSpinnerProvider) ->
+angular.module("MyApp").config (globalSpinnerProvider) ->
   globalSpinnerProvider.configure
     (
       timeout: 500 //default is 0
@@ -34,7 +34,7 @@ You have to, however, apply your own stylesheets and event watchers.
 
 ```js
 
-angular.module('SolarApp').directive 'spinner', (globalSpinner) ->
+angular.module('MyApp').directive 'spinner', (globalSpinner) ->
   link: ($scope, elem, attrs) ->
   
     $scope.$on globalSpinner.eventStart, ->
