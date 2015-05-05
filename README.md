@@ -16,12 +16,19 @@ bower install angular-global-spinner
 angular.module('myApp', ['globalSpinner']);
 ```
 
-```html
-<!-- use 'spinner' directive in view -->
-<div spinner="true" />
+## Configuration
+```js
+
+angular.module("myApp").config (globalSpinnerProvider) ->
+  globalSpinnerProvider.configure
+    (
+      timeout: 500
+      eventStart: 'globalSpinner:start'
+      eventStop: 'globalSpinner:stop'
+    )
 ```
 
-You have to, however, apply your own stylesheets.
+You have to, however, apply your own stylesheets and event watchers.
 
 ## Contributing
 
