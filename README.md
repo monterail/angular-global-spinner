@@ -13,7 +13,7 @@ bower install angular-global-spinner
 
 ```js
 // require globalSpinner module as dependency
-angular.module('myApp', ['globalSpinner']);
+angular.module('MyApp', ['globalSpinner']);
 ```
 
 ## Configuration
