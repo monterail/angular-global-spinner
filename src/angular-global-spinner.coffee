@@ -1,43 +1,58 @@
-angular.module("globalSpinner", [])
+angular.module('globalSpinner', [])
 
-angular.module('globalSpinner').config ($provide, $httpProvider) ->
-  $provide.factory 'SpinnerInterceptor', ['$q', '$injector', ($q, $injector) ->
-    $rootScope = $rootScope || $injector.get('$rootScope')
-    activeRequests = 0
+angular.module('globalSpinner')
+  .provider 'globalSpinner', ->
+    configure: (obj = {}) ->
+      @config = obj
 
-    $httpProvider.defaults.transformRequest.push (data) ->
-      $rootScope.$spinnerLoading = true
-      activeRequests++
-      data
+    $get: ->
+      angular.extend(
+        timeout: 1000
+        eventStart: 'globalSpinner:start'
+        eventStop: 'globalSpinner:stop'
+      , @config)
 
-    $httpProvider.defaults.transformResponse.push (data) ->
-      activeRequests--
-      $rootScope.$spinnerLoading = false if activeRequests == 0
-      data
+  .config ($provide, $httpProvider) ->
+    $provide.factory 'globalSpinnerInterceptor', ['$q', '$injector', '$timeout', 'globalSpinner', ($q, $injector, $timeout, globalSpinner) ->
+      $rootScope = $rootScope || $injector.get('$rootScope')
+      spinnerTimeout = null
 
-    checkPending = () ->
-      $http = $http || $injector.get('$http')
-      if $http.pendingRequests.length < 1
-        $rootScope.$spinnerLoading = false
+      hideSpinner = ->
+        if spinnerTimeout
+          $timeout.cancel(spinnerTimeout)
+          spinnerTimeout = null
+        $rootScope.$broadcast globalSpinner.eventStop
 
-    success = (response) ->
-      checkPending()
-      response
+      showSpinner = ->
+        # Only display the spinner if it takes more than X ms to respond to the request.
+        spinnerTimeout ||= $timeout( ->
+          spinnerTimeout = null
+          $rootScope.$broadcast globalSpinner.eventStart
+        , globalSpinner.timeout)
 
-    error = (response) ->
-      checkPending()
-      $q.reject(response)
+      noPendingRequests = ->
+        $http = $http || $injector.get('$http')
+        _.reduce($http.pendingRequests, ((sum, request) ->
+          sum += 1 unless request.headers['X-Silent-Request']
+          sum
+        ), 0) < 1
 
-    (promise) ->
-      $rootScope.$spinnerLoading = true
-      promise.then(success, error)
-  ]
+      request: (request) ->
+        showSpinner() unless request.headers['X-Silent-Request']
+        request
 
-  $httpProvider.responseInterceptors.push('SpinnerInterceptor')
+      requestError: (request) ->
+        hideSpinner() if noPendingRequests()
+        $q.reject(response)
 
-angular.module('globalSpinner').directive 'spinner', ->
-  restrict: 'EA'
-  replace: true
-  link: (scope, element) ->
-    scope.$watch "$spinnerLoading", (v) ->
-      element.css('display', if v then 'block' else 'none')
+      response: (response) ->
+        hideSpinner() if noPendingRequests()
+        response
+
+      responseError: (response) ->
+        hideSpinner() if noPendingRequests()
+        $q.reject(response)
+    ]
+    # enable globalSpinnerInterceptor
+    $httpProvider.interceptors.push 'globalSpinnerInterceptor'
+
