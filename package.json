@@ -1,8 +1,10 @@
 {
   "name": "angular-global-spinner",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "authors": [
-    "Kamil Nicieja <kamil.nicieja@monterail.com>"
+    "Kamil Nicieja <kamil.nicieja@monterail.com>",
+    "Łukasz Potępa <lukasz.potepa@monterail.com>",
+    "Dariusz Gertych <dariusz.gertych@monterail.com>"
   ],
   "repository": "git://github.com/monterail/angular-global-spinner.git",
   "description": "Angular global HTTP spinner",
