@@ -44,6 +44,21 @@ angular.module('MyApp').directive 'spinner', (globalSpinner) ->
 
 ```
 
+##Silent requests
+If you don't want to show spinner during particular HTTP request, just add following header to that:
+
+```js
+{ 'X-Silent-Request': true }
+```
+
+Example:
+
+```js
+$http.get 'www.example.com/someapi', headers: { 'X-Silent-Request': true }
+```
+
+
+
 ## Contributing
 
 1. Fork it
