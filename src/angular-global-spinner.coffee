@@ -13,45 +13,44 @@ angular.module('globalSpinner')
       , @config)
 
   .config ($provide, $httpProvider) ->
-    $provide.factory 'globalSpinnerInterceptor', [
-      '$q', '$injector', '$timeout', 'globalSpinner', '$filter'
-      ($q, $injector, $timeout, globalSpinner, $filter) ->
-        $rootScope = $rootScope || $injector.get('$rootScope')
-        spinnerTimeout = null
+    $provide.factory 'globalSpinnerInterceptor', (
+      $q, $injector, $timeout, globalSpinner, $filter) ->
 
-        hideSpinner = ->
-          if spinnerTimeout
-            $timeout.cancel(spinnerTimeout)
-            spinnerTimeout = null
-          $rootScope.$broadcast globalSpinner.eventStop
+      $rootScope = $rootScope || $injector.get('$rootScope')
+      spinnerTimeout = null
 
-        showSpinner = ->
-          # Only display the spinner if it takes more than X ms to respond to the request.
-          spinnerTimeout ||= $timeout( ->
-            spinnerTimeout = null
-            $rootScope.$broadcast globalSpinner.eventStart
-          , globalSpinner.timeout)
+      hideSpinner = ->
+        if spinnerTimeout
+          $timeout.cancel(spinnerTimeout)
+          spinnerTimeout = null
+        $rootScope.$broadcast globalSpinner.eventStop
 
-        noPendingRequests = ->
-          $http = $http || $injector.get('$http')
-          $filter('filter')($http.pendingRequests, headers: {'X-Silent-Request': undefined}).length < 1
+      showSpinner = ->
+        # Only display the spinner if it takes more than X ms to respond to the request.
+        spinnerTimeout ||= $timeout( ->
+          spinnerTimeout = null
+          $rootScope.$broadcast globalSpinner.eventStart
+        , globalSpinner.timeout)
 
-        request: (request) ->
-          showSpinner() unless request.headers['X-Silent-Request']
-          request
+      noPendingRequests = ->
+        $http = $http || $injector.get('$http')
+        $filter('filter')($http.pendingRequests, headers: {'X-Silent-Request': undefined}).length < 1
 
-        requestError: (request) ->
-          hideSpinner() if noPendingRequests()
-          $q.reject(response)
+      request: (request) ->
+        showSpinner() unless request.headers['X-Silent-Request']
+        request
 
-        response: (response) ->
-          hideSpinner() if noPendingRequests()
-          response
+      requestError: (request) ->
+        hideSpinner() if noPendingRequests()
+        $q.reject(response)
 
-        responseError: (response) ->
-          hideSpinner() if noPendingRequests()
-          $q.reject(response)
-    ]
+      response: (response) ->
+        hideSpinner() if noPendingRequests()
+        response
+
+      responseError: (response) ->
+        hideSpinner() if noPendingRequests()
+        $q.reject(response)
+
     # enable globalSpinnerInterceptor
     $httpProvider.interceptors.push 'globalSpinnerInterceptor'
-
