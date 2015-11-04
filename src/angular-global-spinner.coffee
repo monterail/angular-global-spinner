@@ -34,7 +34,9 @@ angular.module('globalSpinner')
 
       noPendingRequests = ->
         $http = $http || $injector.get('$http')
-        $filter('filter')($http.pendingRequests, headers: {'X-Silent-Request': undefined}).length < 1
+        $filter('filter')($http.pendingRequests, (request) ->
+          !request.headers['X-Silent-Request']
+        ).length < 1
 
       request: (request) ->
         showSpinner() unless request.headers['X-Silent-Request']
