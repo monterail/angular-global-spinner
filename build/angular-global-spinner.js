@@ -38,10 +38,8 @@
       noPendingRequests = function() {
         var $http;
         $http = $http || $injector.get('$http');
-        return $filter('filter')($http.pendingRequests, {
-          headers: {
-            'X-Silent-Request': void 0
-          }
+        return $filter('filter')($http.pendingRequests, function(request) {
+          return !request.headers['X-Silent-Request'];
         }).length < 1;
       };
       return {
