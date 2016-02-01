@@ -1,6 +1,6 @@
 {
   "name": "angular-global-spinner",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "authors": [
     "Kamil Nicieja <kamil.nicieja@monterail.com>",
     "Łukasz Potępa <lukasz.potepa@monterail.com>",
@@ -8,9 +8,7 @@
   ],
   "repository": "git://github.com/monterail/angular-global-spinner.git",
   "description": "Angular global HTTP spinner",
-  "main": [
-    "build/angular-global-spinner.js"
-  ],
+  "main": "build/angular-global-spinner.js",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-coffee": "~0.7.0",
